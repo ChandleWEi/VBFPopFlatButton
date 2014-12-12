@@ -45,12 +45,12 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.currentButtonType = buttonDefaultType;
-        self.currentButtonStyle = buttonPlainStyle;
+        self.currentButtonType = buttonAddType;
+        self.currentButtonStyle = buttonBorderStyle;
         self.lineThickness = 2;
-        self.lineRadius = 0;
-        self.animateToStartPosition = YES;
-        self.tintColor = [UIColor whiteColor];
+        self.lineRadius = 1;
+        self.animateToStartPosition = NO;
+        self.tintColor = [UIColor blackColor];
         [self commonSetup];
     }
     return self;
@@ -82,8 +82,24 @@
     if (self.currentButtonStyle == buttonRoundedStyle) {
         [self setupBackgroundLayer];
     }
+    if (self.currentButtonStyle == buttonBorderStyle) {
+        [self setupBackgroundBorderLayer];
+    }
+    
     
     [self animateToType:self.currentButtonType];
+}
+
+- (void)setupBackgroundBorderLayer {
+    self.bckgLayer = [CALayer layer];
+    CGFloat amount = self.frame.size.width / 3;
+    self.bckgLayer.frame = CGRectInset(self.bounds, -amount, -amount);
+    self.bckgLayer.cornerRadius = self.bckgLayer.bounds.size.width/2;
+    self.bckgLayer.backgroundColor = self.roundBackgroundColor.CGColor;
+    self.bckgLayer.borderWidth = 1.0;
+    self.bckgLayer.borderColor = [[UIColor blackColor] CGColor];
+    
+    [self.layer insertSublayer:self.bckgLayer below:_firstSegment];
 }
 
 - (void)setupBackgroundLayer {
@@ -92,7 +108,6 @@
     self.bckgLayer.frame = CGRectInset(self.bounds, -amount, -amount);
     self.bckgLayer.cornerRadius = self.bckgLayer.bounds.size.width/2;
     self.bckgLayer.backgroundColor = self.roundBackgroundColor.CGColor;
-
     [self.layer insertSublayer:self.bckgLayer below:_firstSegment];
 }
 
@@ -100,6 +115,12 @@
     if (_currentButtonStyle == buttonRoundedStyle) {
         if (!self.bckgLayer) {
             [self setupBackgroundLayer];
+        }
+        self.bckgLayer.backgroundColor = roundBackgroundColor.CGColor;
+    }
+    if (_currentButtonStyle == buttonBorderStyle) {
+        if (!self.bckgLayer) {
+            [self setupBackgroundBorderLayer];
         }
         self.bckgLayer.backgroundColor = roundBackgroundColor.CGColor;
     }

@@ -36,7 +36,8 @@ typedef NS_ENUM(NSInteger, FlatButtonType) {
 
 typedef NS_ENUM(NSInteger, FlatButtonStyle) {
     buttonPlainStyle,
-    buttonRoundedStyle
+    buttonRoundedStyle,
+    buttonBorderStyle
 };
 
 @property (nonatomic) FlatButtonType currentButtonType;
